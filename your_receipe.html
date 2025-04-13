@@ -95,56 +95,27 @@
  firebase.initializeApp(firebaseConfig);
     
 // Превью фото
-    document.getElementById('photo').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('preview').src = e.target.result;
-          document.getElementById('preview').style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-      }
-    });
+  document.getElementById('recipeForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const file = document.getElementById('photo').files[0];
+  const reader = new FileReader();
 
-    // Отправка формы
-    document.getElementById('recipeForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const title = document.getElementById('title').value;
-      const description = document.getElementById('description').value;
-      const ingredients = document.getElementById('ingredients').value;
-      const photoFile = document.getElementById('photo').files[0];
+  reader.onload = function(e) {
+    const recipeData = {
+      title: document.getElementById('title').value,
+      description: document.getElementById('description').value,
+      ingredients: document.getElementById('ingredients').value,
+      imageBase64: e.target.result.split(',')[1], // Убираем префикс
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    };
 
-      if (!photoFile) {
-        alert("Пожалуйста, загрузите фото рецепта!");
-        return;
-      }
-
-      try {
-        // Загрузка фото в Storage
-        const storageRef = firebase.storage().ref();
-        const photoRef = storageRef.child('recipe_photos/' + Date.now() + '_' + photoFile.name);
-        await photoRef.put(photoFile);
-        const photoUrl = await photoRef.getDownloadURL();
-
-        // Сохранение рецепта в Database
-        await firebase.database().ref('recipes/').push({
-          title,
-          description,
-          ingredients,
-          imageUrl: photoUrl,
-          createdAt: firebase.database.ServerValue.TIMESTAMP
-        });
-
-        alert("Рецепт успешно добавлен!");
-        document.getElementById('recipeForm').reset();
-        document.getElementById('preview').style.display = 'none';
-      } catch (error) {
-        console.error("Ошибка:", error);
-        alert("Ошибка при добавлении рецепта: " + error.message);
-      }
-    });
+    firebase.database().ref('recipes/').push(recipeData)
+      .then(() => alert("Рецепт сохранён!"));
+  };
+  
+  reader.readAsDataURL(file);
+});
   </script>
 </body>
 </html>
