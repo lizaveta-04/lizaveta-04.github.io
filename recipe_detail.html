@@ -70,27 +70,22 @@
     measurementId: "G-GX6QX3YQ67"
   };
  firebase.initializeApp(firebaseConfig);
-// Получение ID рецепта из URL
+     
+ // Получение ID рецепта из URL
     const recipeId = new URLSearchParams(window.location.search).get('id');
     
     if (recipeId) {
       firebase.database().ref(`recipes/${recipeId}`).once('value').then(snapshot => {
         const recipe = snapshot.val();
-        const recipeContainer = document.getElementById('recipeContainer');
-        
         if (recipe) {
-          recipeContainer.innerHTML = `
-            <h1>${recipe.title}</h1>
-            <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-img">
-            <p class="recipe-desc">${recipe.description}</p>
-            <div class="ingredients">
-              <h3>Ингредиенты:</h3>
-              <p>${recipe.ingredients}</p>
-            </div>
+          document.getElementById('recipeTitle').textContent = recipe.title;
+          document.getElementById('recipeImage').src = `data:image/jpeg;base64,${recipe.imageBase64}`;
+          document.getElementById('recipeDescription').textContent = recipe.description;
+          document.getElementById('recipeIngredients').textContent = recipe.ingredients;
             <a href="receipes.html" class="back-btn">Назад к рецептам</a>
           `;
         } else {
-          recipeContainer.innerHTML = '<p>Рецепт не найден</p><a href="receipes.html" class="back-btn">Назад к рецептам</a>';
+           document.getElementById('recipeContainer').innerHTML = '<p>Рецепт не найден</p>'<a href="receipes.html" class="back-btn">Назад к рецептам</a>';
         }
       });
     }
