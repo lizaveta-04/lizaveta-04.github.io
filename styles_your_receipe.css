@@ -240,3 +240,10 @@ textarea {
 .footer .left {
   text-align: left;
 }
+
+/* Прервью фото */
+ #preview { 
+   max-width: 300px; 
+   max-height: 200px; 
+   margin-top: 10px; 
+ }
