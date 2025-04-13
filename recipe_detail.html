@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+   <!-- Базовые настройки страницы -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подробности рецепта</title>
+   <!-- Подключение шрифта Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+   <!-- Подключение CSS-файла -->
+  <link rel="stylesheet" href="styles_recipe_detail.css">
+</head>
+<body>
+  <!-- Шапка сайта с логотипом и навигацией -->
+  <header>
+    <div class="logo-title">
+      <!-- Логотип сайта -->
+      <img src="logo.png" alt="Логотип" class="logo">
+      <!-- Заголовок страницы -->
+      <h1>Подробности рецепта</h1>
+    </div>
+     <!-- Чекбокс для мобильного меню (гамбургер) -->
+    <input type="checkbox" id="menu-toggle">
+     <!-- Иконка мобильного меню (гамбургер) -->
+    <label class="menu-icon" for="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <!-- Основное меню навигации -->
+    <div class="menu">
+      <a href="index2.html">Главная</a>
+      <a href="receipes2.html">Рецепты</a> 
+      <a href="your_receipe.html">Ваш рецепт</a> 
+    </div>
+  </header>
+
+  <!-- Контейнер с полным описанием рецепта -->
+  <div id="recipeDetailContainer">
+    <!-- Подробности рецепта будут загружены сюда через JavaScript -->
+  </div>
+
+    <!-- Подвал сайта -->
+  <footer class="footer">
+    <!-- Левая часть подвала с контактами -->
+    <div class="left">
+      <p>Контакты<br>
+      тел.: 89539870092<br>
+      email: lizashe2005@mail.ru</p>
+    </div>
+    <!-- Правая часть подвала с копирайтом -->
+    <div class="right">
+      <p>© 2025 Кулинарная книга.<br>Все права защищены.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Получение ID рецепта из параметров URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const recipeId = urlParams.get('id');
+    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+
+    // Проверка наличия рецепта в localStorage
+    if (recipeId !== null && recipes[recipeId]) {
+      const recipe = recipes[recipeId];
+    
+    // Отображаем информацию о рецепте
+      document.getElementById('recipeDetailContainer').innerHTML = `
+  <h2>${recipe.title}</h2> 
+  <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image"> 
+  <p class="recipe-description"><strong>Описание:</strong> ${recipe.description}</p> 
+  <div class="recipe-ingredients"> 
+    <strong>Состав:</strong><br>${recipe.ingredients}
+  </div>
+  <a href="receipes2.html" class="back-button">Назад к рецептам</a> 
+`;
+
+    } else {
+      // Если рецепт не найден, показываем сообщение об ошибке
+      document.getElementById('recipeDetailContainer').innerHTML = `
+        <p>Рецепт не найден.</p>
+        <a href="receipes2.html" class="back-button">Назад к рецептам</a>
+      `;
+    }
+  </script>
+</body>
+</html>

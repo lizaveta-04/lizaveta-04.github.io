@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- Базовые настройки страницы -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Рецепты</title>
+  <!-- Подключение шрифта Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <!-- Подключение CSS-файла -->
+  <link rel="stylesheet" href="styles_receipes2.css">
+</head>
+<body>
+  <!-- Шапка сайта с логотипом и навигацией -->
+  <header>
+    <div class="logo-title">
+      <!-- Логотип сайта -->
+      <img src="logo.png" alt="Логотип" class="logo">
+      <!-- Заголовок страницы -->
+      <h1>Рецепты</h1>
+    </div>
+    <!-- Чекбокс для мобильного меню (гамбургер) -->
+    <input type="checkbox" id="menu-toggle">
+    <!-- Иконка мобильного меню (гамбургер) -->
+    <label class="menu-icon" for="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <!-- Основное меню навигации -->
+    <div class="menu">
+      <a href="index2.html">Главная</a> 
+      <a href="your_receipe.html">Ваш рецепт</a> 
+    </div>
+  </header>
+
+  <!-- Контейнер для отображения карточек рецептов -->
+  <div class="recipes-container" id="recipesContainer">
+    <!-- Рецепты будут загружены сюда через JavaScript -->
+  </div>
+
+  <!-- Подвал сайта -->
+  <footer class="footer">
+    <!-- Левая часть подвала с контактами -->
+    <div class="left">
+      <p>Контакты<br>
+      тел.: 89539870092<br>
+      email: lizashe2005@mail.ru</p>
+    </div>
+    <!-- Правая часть подвала с копирайтом -->
+    <div class="right">
+      <p>© 2025 Кулинарная книга.<br>Все права защищены.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Загружаем рецепты из localStorage
+    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    const recipesContainer = document.getElementById('recipesContainer');
+
+    // Проходим по каждому рецепту и добавляем его в контейнер
+    recipes.forEach((recipe, index) => {
+      // Создаем карточку рецепта
+      const recipeCard = document.createElement('div');
+      recipeCard.classList.add('recipe-card');
+
+      // Заполняем содержимое карточки
+      recipeCard.innerHTML = `
+        <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
+        <div class="recipe-content">
+          <h2>${recipe.title}</h2>
+          <p>${recipe.description}</p>
+          <!-- Ссылка на страницу с подробной информацией о рецепте -->
+          <a href="recipe_detail.html?id=${index}">Подробнее</a>
+        </div>
+      `;
+      
+      // Добавляем карточку в контейнер
+      recipesContainer.appendChild(recipeCard);
+    });
+  </script>
+</body>
+</html>

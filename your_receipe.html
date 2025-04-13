@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- Базовые настройки страницы -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ваш рецепт</title>
+  <!-- Подключение шрифта Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <!-- Подключение CSS-файла -->
+  <link rel="stylesheet" href="styles_your_receipe.css">
+</head>
+<body>
+  <!-- Шапка сайта с логотипом и навигацией -->
+  <header>
+    <div class="logo-title">
+      <!-- Логотип сайта -->
+      <img src="logo.png" alt="Логотип" class="logo">
+      <!-- Заголовок страницы -->
+      <h1>Ваш рецепт</h1>
+    </div>
+    <!-- Чекбокс для мобильного меню (гамбургер) -->
+    <input type="checkbox" id="menu-toggle">
+    <!-- Иконка мобильного меню (гамбургер) -->
+    <label class="menu-icon" for="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <!-- Основное меню навигации -->
+    <div class="menu">
+      <a href="index2.html">Главная</a> 
+      <a href="receipes2.html">Рецепты</a> 
+    </div>
+  </header>
+
+  <!-- Основной контейнер с формой добавления рецепта -->
+  <div class="container">
+    <!-- Форма для добавления нового рецепта -->
+    <form id="recipeForm">
+      <!-- Поле для названия рецепта -->
+      <div>
+        <label for="title">Название рецепта</label>
+        <input type="text" id="title" name="title" placeholder="Введите название" required>
+      </div>
+      <!-- Поле для краткого описания -->
+      <div>
+        <label for="description">Краткое описание</label>
+        <input type="text" id="description" name="description" placeholder="Введите описание" required>
+      </div>
+      <!-- Поле для списка ингредиентов -->
+      <div>
+        <label for="ingredients">Состав</label>
+        <textarea id="ingredients" name="ingredients" placeholder="Введите ингредиенты" required></textarea>
+      </div>
+      <!-- Блок для загрузки изображения -->
+      <div class="upload-block">
+        <label for="photo" class="upload-button">Загрузите фото</label>
+        <input type="file" id="photo" name="photo" accept="image/*">
+        <!-- Превью загруженного изображения -->
+        <img id="preview" class="preview-image" alt="Предпросмотр изображения">
+      </div>
+      <!-- Кнопка отправки формы -->
+      <button type="submit" class="button">Добавить</button>
+    </form>
+  </div>
+
+  <!-- Подвал сайта -->
+  <div class="footer">
+    <!-- Левая часть подвала с контактами -->
+    <div class="left">
+      <p>Контакты<br>тел.: 89539870092<br>email: lizashe2005@mail.ru</p>
+    </div>
+    <!-- Правая часть подвала с копирайтом -->
+    <div>
+      <p>© 2025 Кулинарная книга.<br>Все права защищены.</p>
+    </div>
+  </div>
+
+  <script>
+    // Обработчик для предпросмотра загружаемого изображения
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const preview = document.getElementById('preview');
+      const file = e.target.files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        
+        // Отображаем превью после загрузки файла
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Обработчик отправки формы
+    document.getElementById('recipeForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Отменяем стандартное поведение формы
+
+      // Получаем значения из формы
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const ingredients = document.getElementById('ingredients').value;
+      const photo = document.getElementById('photo').files[0];
+
+      // Проверяем, загружено ли изображение
+      if (!photo) {
+        alert('Пожалуйста, загрузите фото рецепта');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        
+        // Получаем существующие рецепты из localStorage или создаем новый массив
+        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        
+        // Создаем объект нового рецепта
+        const newRecipe = {
+          title,
+          description,
+          ingredients,
+          image: imageData
+        };
+
+        // Добавляем новый рецепт в массив
+        recipes.push(newRecipe);
+        // Сохраняем обновленный массив в localStorage
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+
+        // Уведомляем пользователя и сбрасываем форму
+        alert('Рецепт успешно добавлен!');
+        document.getElementById('recipeForm').reset();
+        document.getElementById('preview').style.display = 'none';
+      };
+      
+      // Читаем файл изображения как Data URL
+      reader.readAsDataURL(photo);
+    });
+  </script>
+</body>
+</html>
