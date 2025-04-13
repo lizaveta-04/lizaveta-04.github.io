@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <!-- Подключение CSS-файла -->
   <link rel="stylesheet" href="styles_receipes2.css">
+   <!-- Подключение базы данных -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
 </head>
 <body>
   <!-- Шапка сайта с логотипом и навигацией -->
@@ -54,8 +57,7 @@
     </div>
   </footer>
 
-<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
+
   <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
@@ -68,36 +70,31 @@
     measurementId: "G-GX6QX3YQ67"
   };
  firebase.initializeApp(firebaseConfig);
-</script>
-  
-  <script>
-   // Получаем рецепты из Firebase
-firebase.database().ref('recipes/').on('value', (snapshot) => {
-  const recipesContainer = document.getElementById('recipesContainer');
-  recipesContainer.innerHTML = ''; // Очищаем старые рецепты
+ // Загрузка рецептов
+    firebase.database().ref('recipes/').on('value', (snapshot) => {
+      const recipesContainer = document.getElementById('recipesContainer');
+      recipesContainer.innerHTML = '';
+      
+      const recipes = snapshot.val();
+      if (!recipes) {
+        recipesContainer.innerHTML = '<p>Рецептов пока нет. Будьте первым!</p>';
+        return;
+      }
 
-  const recipes = snapshot.val();
-  
-  if (!recipes) {
-    recipesContainer.innerHTML = '<p>Рецептов пока нет.</p>';
-    return;
-  }
-
-  Object.keys(recipes).forEach(key => {
-    const recipe = recipes[key];
-    const recipeCard = document.createElement('div');
-    recipeCard.classList.add('recipe-card');
-    recipeCard.innerHTML = `
-      <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
-      <div class="recipe-content">
-        <h2>${recipe.title}</h2>
-        <p>${recipe.description}</p>
-        <a href="recipe_detail.html?id=${key}">Подробнее</a>
-      </div>
-    `;
-    recipesContainer.appendChild(recipeCard);
-  });
-});
+      Object.keys(recipes).forEach(key => {
+        const recipe = recipes[key];
+        recipesContainer.innerHTML += `
+          <div class="recipe-card">
+            <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-img">
+            <div class="recipe-content">
+              <h3 class="recipe-title">${recipe.title}</h3>
+              <p class="recipe-desc">${recipe.description}</p>
+              <a href="recipe_detail.html?id=${key}" class="recipe-link">Подробнее</a>
+            </div>
+          </div>
+        `;
+      });
+    });
   </script>
 </body>
 </html>
