@@ -95,27 +95,48 @@
  firebase.initializeApp(firebaseConfig);
     
 // Превью фото
-  document.getElementById('recipeForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const file = document.getElementById('photo').files[0];
-  const reader = new FileReader();
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview').src = e.target.result;
+          document.getElementById('preview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
-  reader.onload = function(e) {
-    const recipeData = {
-      title: document.getElementById('title').value,
-      description: document.getElementById('description').value,
-      ingredients: document.getElementById('ingredients').value,
-      imageBase64: e.target.result.split(',')[1], // Убираем префикс
-      createdAt: firebase.database.ServerValue.TIMESTAMP
-    };
+    // Отправка формы
+    document.getElementById('recipeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const file = document.getElementById('photo').files[0];
+      if (!file) {
+        alert("Пожалуйста, загрузите фото!");
+        return;
+      }
 
-    firebase.database().ref('recipes/').push(recipeData)
-      .then(() => alert("Рецепт сохранён!"));
-  };
-  
-  reader.readAsDataURL(file);
-});
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const recipeData = {
+          title: document.getElementById('title').value,
+          description: document.getElementById('description').value,
+          ingredients: document.getElementById('ingredients').value,
+          imageBase64: e.target.result.split(',')[1], // Убираем 'data:image/...;base64,'
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        firebase.database().ref('recipes/').push(recipeData)
+          .then(() => {
+            alert("Рецепт успешно сохранён!");
+            document.getElementById('recipeForm').reset();
+            document.getElementById('preview').style.display = 'none';
+          })
+          .catch(error => alert("Ошибка: " + error.message));
+      };
+      reader.readAsDataURL(file);
+    });
   </script>
 </body>
 </html>
