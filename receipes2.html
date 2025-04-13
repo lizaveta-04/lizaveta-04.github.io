@@ -54,31 +54,50 @@
     </div>
   </footer>
 
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script>
-    // Загружаем рецепты из localStorage
-    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-    const recipesContainer = document.getElementById('recipesContainer');
+  const firebaseConfig = {
+    apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
+    authDomain: "cookreceipe-84401.firebaseapp.com",
+    databaseURL: "https://cookreceipe-84401-default-rtdb.firebaseio.com",
+    projectId: "cookreceipe-84401",
+    storageBucket: "cookreceipe-84401.firebasestorage.app",
+    messagingSenderId: "737772447460",
+    appId: "1:737772447460:web:b91a1d80e68b2705642ef1",
+    measurementId: "G-GX6QX3YQ67"
+  };
+ firebase.initializeApp(firebaseConfig);
+</script>
+  
+  <script>
+   // Получаем рецепты из Firebase
+firebase.database().ref('recipes/').on('value', (snapshot) => {
+  const recipesContainer = document.getElementById('recipesContainer');
+  recipesContainer.innerHTML = ''; // Очищаем старые рецепты
 
-    // Проходим по каждому рецепту и добавляем его в контейнер
-    recipes.forEach((recipe, index) => {
-      // Создаем карточку рецепта
-      const recipeCard = document.createElement('div');
-      recipeCard.classList.add('recipe-card');
+  const recipes = snapshot.val();
+  
+  if (!recipes) {
+    recipesContainer.innerHTML = '<p>Рецептов пока нет.</p>';
+    return;
+  }
 
-      // Заполняем содержимое карточки
-      recipeCard.innerHTML = `
-        <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
-        <div class="recipe-content">
-          <h2>${recipe.title}</h2>
-          <p>${recipe.description}</p>
-          <!-- Ссылка на страницу с подробной информацией о рецепте -->
-          <a href="recipe_detail.html?id=${index}">Подробнее</a>
-        </div>
-      `;
-      
-      // Добавляем карточку в контейнер
-      recipesContainer.appendChild(recipeCard);
-    });
+  Object.keys(recipes).forEach(key => {
+    const recipe = recipes[key];
+    const recipeCard = document.createElement('div');
+    recipeCard.classList.add('recipe-card');
+    recipeCard.innerHTML = `
+      <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
+      <div class="recipe-content">
+        <h2>${recipe.title}</h2>
+        <p>${recipe.description}</p>
+        <a href="recipe_detail.html?id=${key}">Подробнее</a>
+      </div>
+    `;
+    recipesContainer.appendChild(recipeCard);
+  });
+});
   </script>
 </body>
 </html>
