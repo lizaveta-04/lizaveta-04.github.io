@@ -55,34 +55,44 @@
     </div>
   </footer>
 
+   <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script>
-    // Получение ID рецепта из параметров URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const recipeId = urlParams.get('id');
-    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+  const firebaseConfig = {
+    apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
+    authDomain: "cookreceipe-84401.firebaseapp.com",
+    databaseURL: "https://cookreceipe-84401-default-rtdb.firebaseio.com",
+    projectId: "cookreceipe-84401",
+    storageBucket: "cookreceipe-84401.firebasestorage.app",
+    messagingSenderId: "737772447460",
+    appId: "1:737772447460:web:b91a1d80e68b2705642ef1",
+    measurementId: "G-GX6QX3YQ67"
+  };
+ firebase.initializeApp(firebaseConfig);
+</script>
+   
+  <script>
+    const recipeId = new URLSearchParams(window.location.search).get('id');
 
-    // Проверка наличия рецепта в localStorage
-    if (recipeId !== null && recipes[recipeId]) {
-      const recipe = recipes[recipeId];
-    
-    // Отображаем информацию о рецепте
-      document.getElementById('recipeDetailContainer').innerHTML = `
-  <h2>${recipe.title}</h2> 
-  <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image"> 
-  <p class="recipe-description"><strong>Описание:</strong> ${recipe.description}</p> 
-  <div class="recipe-ingredients"> 
-    <strong>Состав:</strong><br>${recipe.ingredients}
-  </div>
-  <a href="receipes2.html" class="back-button">Назад к рецептам</a> 
-`;
-
-    } else {
-      // Если рецепт не найден, показываем сообщение об ошибке
-      document.getElementById('recipeDetailContainer').innerHTML = `
-        <p>Рецепт не найден.</p>
-        <a href="receipes2.html" class="back-button">Назад к рецептам</a>
-      `;
+firebase.database().ref(`recipes/${recipeId}`).once('value')
+  .then(snapshot => {
+    const recipe = snapshot.val();
+    if (!recipe) {
+      document.getElementById('recipeDetailContainer').innerHTML = '<p>Рецепт не найден.</p>';
+      return;
     }
+
+    document.getElementById('recipeDetailContainer').innerHTML = `
+      <h2>${recipe.title}</h2>
+      <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
+      <p><strong>Описание:</strong> ${recipe.description}</p>
+      <div class="recipe-ingredients">
+        <strong>Ингредиенты:</strong><br>${recipe.ingredients}
+      </div>
+      <a href="receipes.html" class="back-button">Назад к рецептам</a>
+    `;
+  })
+  .catch(error => console.error(error));
   </script>
 </body>
 </html>
