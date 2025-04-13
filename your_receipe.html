@@ -77,71 +77,59 @@
       <p>© 2025 Кулинарная книга.<br>Все права защищены.</p>
     </div>
   </div>
-
+  
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script>
-    // Обработчик для предпросмотра загружаемого изображения
-    document.getElementById('photo').addEventListener('change', function(e) {
-      const preview = document.getElementById('preview');
-      const file = e.target.files[0];
-      
-      if (file) {
-        const reader = new FileReader();
-        
-        // Отображаем превью после загрузки файла
-        reader.onload = function(e) {
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-        }
-        
-        reader.readAsDataURL(file);
-      }
-    });
+  const firebaseConfig = {
+    apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
+    authDomain: "cookreceipe-84401.firebaseapp.com",
+    databaseURL: "https://cookreceipe-84401-default-rtdb.firebaseio.com",
+    projectId: "cookreceipe-84401",
+    storageBucket: "cookreceipe-84401.firebasestorage.app",
+    messagingSenderId: "737772447460",
+    appId: "1:737772447460:web:b91a1d80e68b2705642ef1",
+    measurementId: "G-GX6QX3YQ67"
+  };
+ firebase.initializeApp(firebaseConfig);
+</script>
+  
+  <script>
+    document.getElementById('recipeForm').addEventListener('submit', function(e) {
+  e.preventDefault();
 
-    // Обработчик отправки формы
-    document.getElementById('recipeForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Отменяем стандартное поведение формы
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const ingredients = document.getElementById('ingredients').value;
+  const photo = document.getElementById('photo').files[0];
 
-      // Получаем значения из формы
-      const title = document.getElementById('title').value;
-      const description = document.getElementById('description').value;
-      const ingredients = document.getElementById('ingredients').value;
-      const photo = document.getElementById('photo').files[0];
+  if (!photo) {
+    alert("Загрузите фото!");
+    return;
+  }
 
-      // Проверяем, загружено ли изображение
-      if (!photo) {
-        alert('Пожалуйста, загрузите фото рецепта');
-        return;
-      }
+  // Загружаем фото в Firebase Storage (если нужно)
+  // Либо просто сохраняем как Base64
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const recipeData = {
+      title,
+      description,
+      ingredients,
+      image: e.target.result,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    };
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imageData = e.target.result;
-        
-        // Получаем существующие рецепты из localStorage или создаем новый массив
-        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-        
-        // Создаем объект нового рецепта
-        const newRecipe = {
-          title,
-          description,
-          ingredients,
-          image: imageData
-        };
-
-        // Добавляем новый рецепт в массив
-        recipes.push(newRecipe);
-        // Сохраняем обновленный массив в localStorage
-        localStorage.setItem('recipes', JSON.stringify(recipes));
-
-        // Уведомляем пользователя и сбрасываем форму
-        alert('Рецепт успешно добавлен!');
+    // Отправляем в базу данных Firebase
+    firebase.database().ref('recipes/').push(recipeData)
+      .then(() => {
+        alert("Рецепт добавлен!");
         document.getElementById('recipeForm').reset();
-        document.getElementById('preview').style.display = 'none';
-      };
-      
-      // Читаем файл изображения как Data URL
-      reader.readAsDataURL(photo);
-    });
+      })
+      .catch(error => alert("Ошибка: " + error.message));
+  };
+  reader.readAsDataURL(photo);
+});
   </script>
 </body>
 </html>
