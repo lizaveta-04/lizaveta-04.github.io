@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <!-- Подключение CSS-файла -->
   <link rel="stylesheet" href="styles_your_receipe.css">
+   <!-- Подключение базы данных -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
 </head>
 <body>
   <!-- Шапка сайта с логотипом и навигацией -->
@@ -78,8 +81,6 @@
     </div>
   </div>
   
-<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
@@ -92,44 +93,58 @@
     measurementId: "G-GX6QX3YQ67"
   };
  firebase.initializeApp(firebaseConfig);
-</script>
-  
-  <script>
-    document.getElementById('recipeForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+    
+// Превью фото
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview').src = e.target.result;
+          document.getElementById('preview').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      }
+    });
 
-  const title = document.getElementById('title').value;
-  const description = document.getElementById('description').value;
-  const ingredients = document.getElementById('ingredients').value;
-  const photo = document.getElementById('photo').files[0];
+    // Отправка формы
+    document.getElementById('recipeForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const ingredients = document.getElementById('ingredients').value;
+      const photoFile = document.getElementById('photo').files[0];
 
-  if (!photo) {
-    alert("Загрузите фото!");
-    return;
-  }
+      if (!photoFile) {
+        alert("Пожалуйста, загрузите фото рецепта!");
+        return;
+      }
 
-  // Загружаем фото в Firebase Storage (если нужно)
-  // Либо просто сохраняем как Base64
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const recipeData = {
-      title,
-      description,
-      ingredients,
-      image: e.target.result,
-      createdAt: firebase.database.ServerValue.TIMESTAMP
-    };
+      try {
+        // Загрузка фото в Storage
+        const storageRef = firebase.storage().ref();
+        const photoRef = storageRef.child('recipe_photos/' + Date.now() + '_' + photoFile.name);
+        await photoRef.put(photoFile);
+        const photoUrl = await photoRef.getDownloadURL();
 
-    // Отправляем в базу данных Firebase
-    firebase.database().ref('recipes/').push(recipeData)
-      .then(() => {
-        alert("Рецепт добавлен!");
+        // Сохранение рецепта в Database
+        await firebase.database().ref('recipes/').push({
+          title,
+          description,
+          ingredients,
+          imageUrl: photoUrl,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        });
+
+        alert("Рецепт успешно добавлен!");
         document.getElementById('recipeForm').reset();
-      })
-      .catch(error => alert("Ошибка: " + error.message));
-  };
-  reader.readAsDataURL(photo);
-});
+        document.getElementById('preview').style.display = 'none';
+      } catch (error) {
+        console.error("Ошибка:", error);
+        alert("Ошибка при добавлении рецепта: " + error.message);
+      }
+    });
   </script>
 </body>
 </html>
