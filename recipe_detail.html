@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
    <!-- Подключение CSS-файла -->
   <link rel="stylesheet" href="styles_recipe_detail.css">
+   <!-- Подключение базы данных -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
 </head>
 <body>
   <!-- Шапка сайта с логотипом и навигацией -->
@@ -55,8 +58,6 @@
     </div>
   </footer>
 
-   <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
@@ -69,30 +70,30 @@
     measurementId: "G-GX6QX3YQ67"
   };
  firebase.initializeApp(firebaseConfig);
-</script>
-   
-  <script>
+// Получение ID рецепта из URL
     const recipeId = new URLSearchParams(window.location.search).get('id');
-
-firebase.database().ref(`recipes/${recipeId}`).once('value')
-  .then(snapshot => {
-    const recipe = snapshot.val();
-    if (!recipe) {
-      document.getElementById('recipeDetailContainer').innerHTML = '<p>Рецепт не найден.</p>';
-      return;
+    
+    if (recipeId) {
+      firebase.database().ref(`recipes/${recipeId}`).once('value').then(snapshot => {
+        const recipe = snapshot.val();
+        const recipeContainer = document.getElementById('recipeContainer');
+        
+        if (recipe) {
+          recipeContainer.innerHTML = `
+            <h1>${recipe.title}</h1>
+            <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-img">
+            <p class="recipe-desc">${recipe.description}</p>
+            <div class="ingredients">
+              <h3>Ингредиенты:</h3>
+              <p>${recipe.ingredients}</p>
+            </div>
+            <a href="receipes.html" class="back-btn">Назад к рецептам</a>
+          `;
+        } else {
+          recipeContainer.innerHTML = '<p>Рецепт не найден</p><a href="receipes.html" class="back-btn">Назад к рецептам</a>';
+        }
+      });
     }
-
-    document.getElementById('recipeDetailContainer').innerHTML = `
-      <h2>${recipe.title}</h2>
-      <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
-      <p><strong>Описание:</strong> ${recipe.description}</p>
-      <div class="recipe-ingredients">
-        <strong>Ингредиенты:</strong><br>${recipe.ingredients}
-      </div>
-      <a href="receipes.html" class="back-button">Назад к рецептам</a>
-    `;
-  })
-  .catch(error => console.error(error));
   </script>
 </body>
 </html>
