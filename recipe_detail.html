@@ -9,9 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
    <!-- Подключение CSS-файла -->
   <link rel="stylesheet" href="styles_recipe_detail.css">
-   <!-- Подключение базы данных -->
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
 </head>
 <body>
   <!-- Шапка сайта с логотипом и навигацией -->
@@ -49,7 +46,7 @@
     <!-- Левая часть подвала с контактами -->
     <div class="left">
       <p>Контакты<br>
-      тел.: 895398700**<br>
+      тел.: 89539870092<br>
       email: lizashe2005@mail.ru</p>
     </div>
     <!-- Правая часть подвала с копирайтом -->
@@ -59,35 +56,32 @@
   </footer>
 
   <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBv87aexiTY_jIipKV986xQH1pmcyfg9rY",
-    authDomain: "cookreceipe-84401.firebaseapp.com",
-    databaseURL: "https://cookreceipe-84401-default-rtdb.firebaseio.com",
-    projectId: "cookreceipe-84401",
-    storageBucket: "cookreceipe-84401.firebasestorage.app",
-    messagingSenderId: "737772447460",
-    appId: "1:737772447460:web:b91a1d80e68b2705642ef1",
-    measurementId: "G-GX6QX3YQ67"
-  };
- firebase.initializeApp(firebaseConfig);
-     
- // Получение ID рецепта из URL
-    const recipeId = new URLSearchParams(window.location.search).get('id');
+    // Получение ID рецепта из параметров URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const recipeId = urlParams.get('id');
+    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+
+    // Проверка наличия рецепта в localStorage
+    if (recipeId !== null && recipes[recipeId]) {
+      const recipe = recipes[recipeId];
     
-    if (recipeId) {
-      firebase.database().ref(`recipes/${recipeId}`).once('value').then(snapshot => {
-        const recipe = snapshot.val();
-        if (recipe) {
-          document.getElementById('recipeTitle').textContent = recipe.title;
-          document.getElementById('recipeImage').src = `data:image/jpeg;base64,${recipe.imageBase64}`;
-          document.getElementById('recipeDescription').textContent = recipe.description;
-          document.getElementById('recipeIngredients').textContent = recipe.ingredients;
-            <a href="receipes.html" class="back-btn">Назад к рецептам</a>
-          `;
-        } else {
-           document.getElementById('recipeContainer').innerHTML = '<p>Рецепт не найден</p>'<a href="receipes.html" class="back-btn">Назад к рецептам</a>';
-        }
-      });
+    // Отображаем информацию о рецепте
+      document.getElementById('recipeDetailContainer').innerHTML = `
+  <h2>${recipe.title}</h2> 
+  <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image"> 
+  <p class="recipe-description"><strong>Описание:</strong> ${recipe.description}</p> 
+  <div class="recipe-ingredients"> 
+    <strong>Состав:</strong><br>${recipe.ingredients}
+  </div>
+  <a href="receipes2.html" class="back-button">Назад к рецептам</a> 
+`;
+
+    } else {
+      // Если рецепт не найден, показываем сообщение об ошибке
+      document.getElementById('recipeDetailContainer').innerHTML = `
+        <p>Рецепт не найден.</p>
+        <a href="receipes2.html" class="back-button">Назад к рецептам</a>
+      `;
     }
   </script>
 </body>
