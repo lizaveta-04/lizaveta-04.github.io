@@ -77,13 +77,18 @@
   recipesContainer.appendChild(recipeCard);
 });
 
-// Обработчик кнопок "Удалить"
+// Обработчик кнопок "Удалить" с подтверждением
 document.querySelectorAll('.delete-button').forEach(button => {
-  button.addEventListener('click', function() {
+  button.addEventListener('click', function () {
     const index = this.getAttribute('data-index');
-    recipes.splice(index, 1); // Удаляем рецепт из массива
-    localStorage.setItem('recipes', JSON.stringify(recipes)); // Обновляем localStorage
-    location.reload(); // Перезагружаем страницу
+
+    // Подтверждение от пользователя
+    const confirmed = confirm("Вы уверены, что хотите удалить этот рецепт?");
+    if (confirmed) {
+      recipes.splice(index, 1); // Удаляем из массива
+      localStorage.setItem('recipes', JSON.stringify(recipes)); // Обновляем localStorage
+      location.reload(); // Обновляем страницу
+    }
   });
 });
   </script>
