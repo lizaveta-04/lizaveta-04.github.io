@@ -55,42 +55,30 @@
   </footer>
 
   <script>
-    // Загружаем рецепты из localStorage
+   // Загружаем рецепты из localStorage
     const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
     const recipesContainer = document.getElementById('recipesContainer');
 
     // Проходим по каждому рецепту и добавляем его в контейнер
     recipes.forEach((recipe, index) => {
-  const recipeCard = document.createElement('div');
-  recipeCard.classList.add('recipe-card');
+      // Создаем карточку рецепта
+      const recipeCard = document.createElement('div');
+      recipeCard.classList.add('recipe-card');
 
-  recipeCard.innerHTML = `
-    <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
-    <div class="recipe-content">
-      <h2>${recipe.title}</h2>
-      <p>${recipe.description}</p>
-      <a href="recipe_detail.html?id=${index}">Подробнее</a>
-      <button class="delete-button" onclick="confirmDelete('123')">Удалить</button>
-    </div>
-  `;
-
-  recipesContainer.appendChild(recipeCard);
-});
-
-// Обработчик кнопок "Удалить" с подтверждением
-document.querySelectorAll('.delete-button').forEach(button => {
-  button.addEventListener('click', function () {
-    const index = this.getAttribute('data-index');
-
-    // Подтверждение от пользователя
-    const confirmed = confirm("Вы уверены, что хотите удалить этот рецепт?");
-    if (confirmed) {
-      recipes.splice(index, 1); // Удаляем из массива
-      localStorage.setItem('recipes', JSON.stringify(recipes)); // Обновляем localStorage
-      location.reload(); // Обновляем страницу
-    }
-  });
-});
+      // Заполняем содержимое карточки
+      recipeCard.innerHTML = `
+        <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
+        <div class="recipe-content">
+          <h2>${recipe.title}</h2>
+          <p>${recipe.description}</p>
+          <!-- Ссылка на страницу с подробной информацией о рецепте -->
+          <a href="recipe_detail.html?id=${index}">Подробнее</a>
+        </div>
+      `;
+      
+      // Добавляем карточку в контейнер
+      recipesContainer.appendChild(recipeCard);
+    });
   </script>
 </body>
 </html>
