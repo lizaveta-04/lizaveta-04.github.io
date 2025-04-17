@@ -61,24 +61,31 @@
 
     // Проходим по каждому рецепту и добавляем его в контейнер
     recipes.forEach((recipe, index) => {
-      // Создаем карточку рецепта
-      const recipeCard = document.createElement('div');
-      recipeCard.classList.add('recipe-card');
+  const recipeCard = document.createElement('div');
+  recipeCard.classList.add('recipe-card');
 
-      // Заполняем содержимое карточки
-      recipeCard.innerHTML = `
-        <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
-        <div class="recipe-content">
-          <h2>${recipe.title}</h2>
-          <p>${recipe.description}</p>
-          <!-- Ссылка на страницу с подробной информацией о рецепте -->
-          <a href="recipe_detail.html?id=${index}">Подробнее</a>
-        </div>
-      `;
-      
-      // Добавляем карточку в контейнер
-      recipesContainer.appendChild(recipeCard);
-    });
+  recipeCard.innerHTML = `
+    <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image">
+    <div class="recipe-content">
+      <h2>${recipe.title}</h2>
+      <p>${recipe.description}</p>
+      <a href="recipe_detail.html?id=${index}">Подробнее</a>
+      <button class="delete-button" data-index="${index}">Удалить</button>
+    </div>
+  `;
+
+  recipesContainer.appendChild(recipeCard);
+});
+
+// Обработчик кнопок "Удалить"
+document.querySelectorAll('.delete-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const index = this.getAttribute('data-index');
+    recipes.splice(index, 1); // Удаляем рецепт из массива
+    localStorage.setItem('recipes', JSON.stringify(recipes)); // Обновляем localStorage
+    location.reload(); // Перезагружаем страницу
+  });
+});
   </script>
 </body>
 </html>
