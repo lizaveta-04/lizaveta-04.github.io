@@ -1,84 +1,102 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Обратная связь</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles_contact.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Мета-информация -->
+  <meta charset="UTF-8"> <!-- Кодировка документа (UTF-8 для поддержки кириллицы) -->
+  <title>Обратная связь</title> <!-- Заголовок страницы в браузере -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Настройки адаптивности для мобильных устройств -->
+  
+  <!-- Подключение стилей -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"> <!-- Красивый шрифт для заголовков -->
+  <link rel="stylesheet" href="styles_contact.css"> <!-- Основной файл стилей -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
 </head>
-<body>
 
+<body>
+  <!-- Шапка сайта -->
   <header>
+    <!-- Блок с логотипом и заголовком -->
     <div class="logo-title">
-      <img src="logo.png" alt="Логотип" class="logo">
-      <h1>Обратная связь</h1>
+      <img src="logo.png" alt="Логотип" class="logo"> <!-- Логотип сайта -->
+      <h1>Обратная связь</h1> <!-- Главный заголовок страницы -->
     </div>
 
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">
+    <!-- Элементы мобильного меню -->
+    <input type="checkbox" id="menu-toggle"> <!-- Чекбокс для управления мобильным меню -->
+    <label for="menu-toggle" class="menu-icon"> <!-- Гамбургер-иконка (3 полоски) -->
       <span></span>
       <span></span>
       <span></span>
     </label>
 
+    <!-- Основная навигация -->
     <nav class="menu">
-      <a href="index.html">Главная</a>
-      <a href="receipes2.html">Рецепты</a>
-      <a href="your_receipe.html">Ваш рецепт</a>
+      <a href="index.html">Главная</a> <!-- Ссылка на главную страницу -->
+      <a href="receipes2.html">Рецепты</a> <!-- Ссылка на страницу с рецептами -->
+      <a href="your_receipe.html">Ваш рецепт</a> <!-- Ссылка на форму добавления рецепта -->
     </nav>
   </header>
 
-<main>
-  <div class="container contact-container">
-    <form id="contactForm" class="contact-form">
-      <h2>Свяжитесь с нами</h2>
+  <!-- Основное содержимое страницы -->
+  <main>
+    <div class="container contact-container">
+      <!-- Форма обратной связи -->
+      <form id="contactForm" class="contact-form">
+        <h2>Свяжитесь с нами</h2> <!-- Заголовок формы -->
 
-      <input type="text" id="name" placeholder="Ваше имя" required>
-<div class="error-message">Пожалуйста, введите ваше имя</div>
+        <!-- Поле для имени -->
+        <input type="text" id="name" placeholder="Ваше имя" required>
+        <div class="error-message">Пожалуйста, введите ваше имя</div> <!-- Сообщение об ошибке -->
 
-<input type="email" id="email" placeholder="Электронная почта" required>
-<div class="error-message">Пожалуйста, введите корректный email</div>
+        <!-- Поле для email -->
+        <input type="email" id="email" placeholder="Электронная почта" required>
+        <div class="error-message">Пожалуйста, введите корректный email</div>
 
-<input type="tel" id="phone" placeholder="Мобильный телефон" required>
-<div class="error-message">Пожалуйста, введите корректный номер телефона</div>
+        <!-- Поле для телефона -->
+        <input type="tel" id="phone" placeholder="Мобильный телефон" required>
+        <div class="error-message">Пожалуйста, введите корректный номер телефона</div>
 
-<textarea id="message" placeholder="Ваш комментарий" rows="5" required></textarea>
-<div class="error-message">Пожалуйста, введите ваше сообщение</div>
-      <button type="submit">Отправить</button>
-    </form>
-  </div>
-</main>
+        <!-- Поле для сообщения -->
+        <textarea id="message" placeholder="Ваш комментарий" rows="5" required></textarea>
+        <div class="error-message">Пожалуйста, введите ваше сообщение</div>
 
+        <!-- Кнопка отправки формы -->
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Подвал сайта -->
   <footer class="footer">
-    <!-- Левая часть подвала с контактами -->
+    <!-- Левая часть с контактами -->
     <div class="left">
       <p>Контакты<br>
       тел.: 89539870092<br>
       email: lizashe2005@mail.ru</p>
     </div>
-    <!-- Правая часть подвала с копирайтом -->
+    
+    <!-- Правая часть с копирайтом -->
     <div class="right">
       <p>© 2025 Кулинарная книга.<br>Все права защищены.</p>
     </div>
   </footer>
   
+  <!-- Модальное окно (всплывающее) для отображения сообщений -->
   <div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body text-center">
-          <p id="modal-text" class="my-4"></p>
+          <p id="modal-text" class="my-4"></p> <!-- Текст сообщения -->
         </div>
         <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button> <!-- Кнопка закрытия -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Подключение Bootstrap JS + Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js"></script>
+  <!-- Подключение скриптов -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS + Popper -->
+  <script src="script.js"></script> <!-- Пользовательские скрипты -->
 </body>
 </html>
