@@ -209,8 +209,8 @@ header {
 /* Сообщение "Рецепты не найдены" */
 .no-results {
   text-align: center;
-  font-size: 1.2rem;
-  color: #666;
+  font-size: 40px;
+  color: #ED2525;
   margin-top: 50px;
   grid-column: 1 / -1;
 }
