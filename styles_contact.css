@@ -1,0 +1,299 @@
+/* Общие стили для всех элементов */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Стили тела страницы */
+body {
+  font-family: 'Pacifico', cursive;
+  /* Фоновое изображение для всей страницы */
+  background: url('banner2.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #000;
+}
+
+/* Стили шапки сайта */
+header {
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+/* Стили основного заголовка */
+header h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 48px;
+  text-align: center;
+  margin: 0 auto;
+}
+/* Контейнер для логотипа и заголовка */
+.logo-title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+/* Стили логотипа */
+.logo {
+  height: 90px;
+  margin-right: 15px;
+}
+
+/* Стили основного заголовка */
+.logo-title h1 {
+  font-size: 36px;
+  margin: 0 auto;
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Скрытый чекбокс для управления мобильным меню */
+#menu-toggle {
+  display: none;
+}
+
+/* Стили иконки гамбургер-меню */
+.menu-icon {
+  width: 30px;
+  height: 25px;
+  position: relative;
+  cursor: pointer;
+  z-index: 11;
+}
+
+/* Стили полосок гамбургер-меню */
+.menu-icon span {
+  background: #000;
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Позиционирование полосок гамбургера */
+.menu-icon span:nth-child(1) { top: 0; }
+.menu-icon span:nth-child(2) { top: 10px; }
+.menu-icon span:nth-child(3) { top: 20px; }
+
+/* Анимация превращения гамбургера в крестик */
+#menu-toggle:checked + .menu-icon span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 10px;
+}
+#menu-toggle:checked + .menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+#menu-toggle:checked + .menu-icon span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 10px;
+}
+
+/* Стили основного меню (по умолчанию скрыто) */
+.menu {
+  display: none;
+  flex-direction: column;
+  background: white;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  padding: 10px 0;
+  z-index: 10;
+}
+
+/* Стили ссылок в меню */
+.menu a {
+  font-family: 'Pacifico', cursive;
+  text-decoration: none;
+  color: #000;
+  padding: 10px 20px;
+  font-size: 18px;
+  transition: background 0.3s;
+}
+
+/* Эффект при наведении на ссылки меню */
+.menu a:hover {
+  background: #f0f0f0;
+}
+
+/* Отображение меню при активации чекбокса */
+#menu-toggle:checked ~ .menu {
+  display: flex;
+}
+
+main {
+  flex: 1; /* Занимает всё доступное пространство между header и footer */
+  display: flex;
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  padding-top: 140px; /* Отступ сверху, чтобы не перекрывать header */
+}
+
+/* Контейнер формы */
+.contact-container {
+  font-family: 'Pacifico', cursive;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+/* Заголовок формы */
+.contact-form h2 {
+  font-family: 'Pacifico', cursive;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Поля ввода */
+.contact-form input,
+.contact-form textarea {
+  font-family: 'Pacifico', cursive;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: sans-serif;
+}
+
+/* Кнопка "Отправить" — красная */
+.contact-form button {
+  font-family: 'Pacifico', cursive;
+  background-color:  #ED2525;;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+}
+
+.contact-form button:hover {
+  font-family: 'Pacifico', cursive;
+  background-color:  #ED2525;
+}
+
+/* Стили модального окна */
+.custom-modal {
+  font-family: 'Pacifico', cursive;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: flex;
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+  background-color: #fff0f0;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.8em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: none;
+  font-family: sans-serif;
+}
+
+/* Адаптация модального окна под ваш дизайн */
+.modal-content {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-body p {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+/* Кнопка "OK" — зелёная */
+#close-modal {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 16px;
+  border-radius: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#close-modal:hover {
+  background-color: #218838;
+}
+
+.error {
+  border-color: #ED2525 !important;
+  background-color: #fff0f0;
+}
+
+.error-message {
+  color: #ED2525;
+  font-size: 0.8em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: none;
+  font-family: sans-serif;
+}
+
+input:invalid + .error-message,
+input.error + .error-message {
+  display: block;
+}
+/* Стили подвала сайта */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  font-family: 'Pacifico', cursive;
+  font-size: 24px;
+}
+
+/* Стили левой части подвала */
+.footer .left {
+  text-align: left;
+}
+
+/* Стили правой части подвала */
+.footer .right {
+  text-align: right;
+}
