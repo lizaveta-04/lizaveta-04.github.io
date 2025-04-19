@@ -5,89 +5,64 @@
   padding: 0;
 }
 
-/* Стили тела страницы */
 body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   font-size: 14px;
-  font-family: sans-serif;
-  background-color: #c4c4c4;
-  margin: 0;
-  padding: 0;
-  /* Фоновое изображение для всей страницы */
+  font-family: 'Pacifico', cursive;
   background: url("banner.png") no-repeat center center fixed;
   background-size: cover;
 }
 
-/* Стили шапки сайта */
+/* Контейнер основного содержимого */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 140px; /* чтобы не перекрывал хэдер */
+}
+
+/* Хэдер */
 header {
+  position: fixed;
+  top: 0;
+  left: 0;  
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  padding: 20px;
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
 }
 
-/* Контейнер для логотипа и заголовка */
+/* Логотип + заголовок */
 .logo-title {
   display: flex;
   align-items: center;
   flex: 1;
 }
 
-/* Стили логотипа */
 .logo {
   height: 90px;
   margin-right: 15px;
 }
 
-/* Стили основного заголовка */
 header h1 {
-  font-family: 'Pacifico', cursive;
   font-size: 48px;
   text-align: center;
   margin: 0 auto;
 }
 
-/* Стили меню (по умолчанию скрыто) */
-.menu {
-  display: none;
-  flex-direction: column;
-  background: white;
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  padding: 10px 0;
-  z-index: 10;
-}
-
-/* Стили ссылок в меню */
-.menu a {
-  font-family: 'Pacifico', cursive;
-  text-decoration: none;
-  color: #000;
-  padding: 10px 20px;
-  font-size: 18px;
-  transition: background 0.3s;
-}
-
-/* Эффект при наведении на ссылки меню */
-.menu a:hover {
-  background: #f0f0f0;
-}
-
-/* Скрытый чекбокс для управления мобильным меню */
+/* Гамбургер-меню */
 #menu-toggle {
   display: none;
 }
 
-/* Стили иконки гамбургер-меню */
 .menu-icon {
   width: 30px;
   height: 25px;
@@ -96,7 +71,6 @@ header h1 {
   z-index: 11;
 }
 
-/* Стили полосок гамбургер-меню */
 .menu-icon span {
   background: #000;
   position: absolute;
@@ -106,12 +80,10 @@ header h1 {
   transition: all 0.3s ease-in-out;
 }
 
-/* Позиционирование полосок гамбургера */
 .menu-icon span:nth-child(1) { top: 0; }
 .menu-icon span:nth-child(2) { top: 10px; }
 .menu-icon span:nth-child(3) { top: 20px; }
 
-/* Анимация превращения гамбургера в крестик */
 #menu-toggle:checked + .menu-icon span:nth-child(1) {
   transform: rotate(45deg);
   top: 10px;
@@ -126,43 +98,64 @@ header h1 {
   top: 10px;
 }
 
-/* Отображение меню при активации чекбокса */
+/* Меню */
+.menu {
+  display: none;
+  flex-direction: column;
+  background: white;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  padding: 10px 0;
+  z-index: 10;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #000;
+  padding: 10px 20px;
+  font-size: 18px;
+  transition: background 0.3s;
+}
+
+.menu a:hover {
+  background: #f0f0f0;
+}
+
 #menu-toggle:checked ~ .menu {
   display: flex;
 }
 
-/* Стили основного контейнера контента */
-.container {
+/* Центр логотипа в теле */
+.title-block {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-/* Стили блока с основным изображением */
 .title-block img {
   max-width: 70%;
-  border: none;
+  height: auto;
   display: block;
-  margin: 0 auto;
 }
 
-/* Стили подвала сайта */
+/* Футер */
 .footer {
   display: flex;
   justify-content: space-between;
   background-color: #000;
   padding: 20px;
   color: #fff;
-  font-family: 'Pacifico', cursive;
   font-size: 24px;
 }
 
-/* Стили левой части подвала */
 .footer .left {
   text-align: left;
 }
 
-/* Стили правой части подвала */
 .footer .right {
   text-align: right;
 }
