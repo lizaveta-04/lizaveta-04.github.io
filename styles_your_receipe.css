@@ -8,7 +8,7 @@
 /* Стили тела страницы */
 body {
   font-size: 14px;
-  font-family: sans-serif;
+  font-family: 'Pacifico', cursive;
   /* Фоновое изображение для всей страницы */
   background: url("banner2.png") no-repeat center center fixed;
   background-size: cover;
@@ -22,6 +22,7 @@ body {
   justify-content: center;
   min-height: calc(100vh - 160px); 
   position: relative;
+  padding-top: 90px; 
 }
 
 /* Стили шапки сайта */
@@ -139,6 +140,7 @@ header {
 
 /* Стили формы добавления рецепта */
 form {
+  padding-top: 140px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -148,6 +150,7 @@ form {
   border-radius: 20px;
   margin-top: 100px; 
   background-color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
 }
 
 /* Стили меток полей формы */
@@ -240,10 +243,3 @@ textarea {
 .footer .left {
   text-align: left;
 }
-
-/* Прервью фото */
- #preview { 
-   max-width: 300px; 
-   max-height: 200px; 
-   margin-top: 10px; 
- }
