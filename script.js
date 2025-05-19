@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
   const form = document.getElementById("contactForm");
   let formSubmitted = false;
-  
+
   // Инициализация Bootstrap Modal
   const formModal = new bootstrap.Modal(document.getElementById('formModal'));
-  
+
   // Получаем все поля формы
   const nameInput = document.getElementById("name");
   const emailInput = document.getElementById("email");
@@ -34,25 +34,40 @@ document.addEventListener("DOMContentLoaded", function() {
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       formSubmitted = true;
-      
+
       // Валидация всех полей
-      const isNameValid = validateField(nameInput);
+      const isNameValid = validateField(form.name);
       const isEmailValid = validateEmailField();
       const isPhoneValid = validatePhoneField();
-      const isMessageValid = validateField(messageInput);
+      const isMessageValid = validateField(form.message);
 
       if (isNameValid && isEmailValid && isPhoneValid && isMessageValid) {
         // Все данные корректны
-        console.log("Данные формы:", {
-          name: nameInput.value.trim(),
-          email: emailInput.value.trim(),
-          phone: phoneInput.value.trim(),
-          message: messageInput.value.trim()
+
+        // Собираем данные формы
+        const formData = new FormData(form);
+        formData.append('form_type', 'feedback');
+
+        // Отправка на сервер через fetch
+        fetch('script.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showModal("✅ " + data.message);
+            form.reset();
+            formSubmitted = false;
+          } else {
+            showModal("❌ " + data.message);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          showModal("❌ Ошибка при отправке формы");
         });
 
-        showModal("✅ Сообщение успешно отправлено!");
-        form.reset();
-        formSubmitted = false;
       } else {
         showModal("❌ Пожалуйста, исправьте ошибки в форме.");
       }
@@ -75,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function validateEmailField() {
     const errorMessage = emailInput.nextElementSibling;
     const email = emailInput.value.trim();
-    
+
     if (email === "") {
       emailInput.classList.add("is-invalid");
       if (errorMessage) errorMessage.style.display = "block";
@@ -97,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function validatePhoneField() {
     const errorMessage = phoneInput.nextElementSibling;
     const phone = phoneInput.value.trim();
-    
+
     if (phone === "") {
       phoneInput.classList.add("is-invalid");
       if (errorMessage) errorMessage.style.display = "block";
