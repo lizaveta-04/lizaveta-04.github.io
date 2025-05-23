@@ -150,8 +150,9 @@ main {
   width: 90%;
   max-width: 600px;
   margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
 }
-
 /* Заголовок формы */
 .contact-form h2 {
   font-family: 'Pacifico', cursive;
@@ -276,6 +277,28 @@ input:invalid + .error-message,
 input.error + .error-message {
   display: block;
 }
+
+.feedback-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.feedback-list-header h3 {
+  margin: 0 auto;
+  flex: 1 1 auto;
+  text-align: center;
+  color: #ED2525;
+  font-family: 'Pacifico', cursive;
+  font-size: 2em;
+}
+
+#refreshFeedback {
+  white-space: nowrap;
+  margin-left: 16px;
+}
+
 /* Стили подвала сайта */
 .footer {
   display: flex;
@@ -287,6 +310,7 @@ input.error + .error-message {
   font-family: 'Pacifico', cursive;
   font-size: 24px;
 }
+
 
 /* Стили левой части подвала */
 .footer .left {

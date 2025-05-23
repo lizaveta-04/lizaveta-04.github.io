@@ -1,138 +1,87 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const form = document.getElementById("contactForm");
-  let formSubmitted = false;
+$(document).ready(function () {
+    // Модалка Bootstrap
+    const formModal = new bootstrap.Modal(document.getElementById('formModal'));
 
-  // Инициализация Bootstrap Modal
-  const formModal = new bootstrap.Modal(document.getElementById('formModal'));
-
-  // Получаем все поля формы
-  const nameInput = document.getElementById("name");
-  const emailInput = document.getElementById("email");
-  const phoneInput = document.getElementById("phone");
-  const messageInput = document.getElementById("message");
-
-  // Добавляем обработчики событий
-  [nameInput, emailInput, phoneInput, messageInput].forEach(input => {
-    if (input) {
-      input.addEventListener("blur", function() {
-        if (formSubmitted || this.value.trim() !== "") {
-          validateField(this);
-        }
-      });
-    }
-  });
-
-  if (emailInput) {
-    emailInput.addEventListener("input", validateEmailField);
-  }
-
-  if (phoneInput) {
-    phoneInput.addEventListener("input", validatePhoneField);
-  }
-
-  if (form) {
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-      formSubmitted = true;
-
-      // Валидация всех полей
-      const isNameValid = validateField(form.name);
-      const isEmailValid = validateEmailField();
-      const isPhoneValid = validatePhoneField();
-      const isMessageValid = validateField(form.message);
-
-      if (isNameValid && isEmailValid && isPhoneValid && isMessageValid) {
-        // Все данные корректны
-
-        // Собираем данные формы
-        const formData = new FormData(form);
-        formData.append('form_type', 'feedback');
-
-        // Отправка на сервер через fetch
-        fetch('script.php', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            showModal("✅ " + data.message);
-            form.reset();
-            formSubmitted = false;
-          } else {
-            showModal("❌ " + data.message);
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          showModal("❌ Ошибка при отправке формы");
+    // Отправка формы AJAX
+    $('#contactForm').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    showModal("✅ " + response.message);
+                    $('#contactForm')[0].reset();
+                    updateFeedbackList(); // обновить список сообщений
+                } else {
+                    showModal("❌ " + response.message);
+                }
+            },
+            error: function() {
+                showModal("❌ Ошибка при отправке формы");
+            }
         });
-
-      } else {
-        showModal("❌ Пожалуйста, исправьте ошибки в форме.");
-      }
     });
-  }
 
-  function validateField(field) {
-    const errorMessage = field.nextElementSibling;
-    if (field.value.trim() === "") {
-      field.classList.add("is-invalid");
-      if (errorMessage) errorMessage.style.display = "block";
-      return false;
-    } else {
-      field.classList.remove("is-invalid");
-      if (errorMessage) errorMessage.style.display = "none";
-      return true;
+    // Функция показа модального окна
+    function showModal(message) {
+        $('#modal-text').text(message);
+        formModal.show();
     }
-  }
 
-  function validateEmailField() {
-    const errorMessage = emailInput.nextElementSibling;
-    const email = emailInput.value.trim();
-
-    if (email === "") {
-      emailInput.classList.add("is-invalid");
-      if (errorMessage) errorMessage.style.display = "block";
-      return false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      emailInput.classList.add("is-invalid");
-      if (errorMessage) {
-        errorMessage.textContent = "Пожалуйста, введите корректный email";
-        errorMessage.style.display = "block";
-      }
-      return false;
-    } else {
-      emailInput.classList.remove("is-invalid");
-      if (errorMessage) errorMessage.style.display = "none";
-      return true;
+    // Получение списка feedback через GET
+    function updateFeedbackList() {
+        $.ajax({
+            url: 'ajax.php',
+            method: 'GET',
+            data: { action: 'get_feedback' },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    renderFeedback(response.data);
+                } else {
+                    $('#feedbackList').html('<div>Нет сообщений</div>');
+                }
+            },
+            error: function() {
+                $('#feedbackList').html('<div>Ошибка загрузки</div>');
+            }
+        });
     }
-  }
 
-  function validatePhoneField() {
-    const errorMessage = phoneInput.nextElementSibling;
-    const phone = phoneInput.value.trim();
-
-    if (phone === "") {
-      phoneInput.classList.add("is-invalid");
-      if (errorMessage) errorMessage.style.display = "block";
-      return false;
-    } else if (!/^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/.test(phone)) {
-      phoneInput.classList.add("is-invalid");
-      if (errorMessage) {
-        errorMessage.textContent = "Пожалуйста, введите корректный номер телефона";
-        errorMessage.style.display = "block";
-      }
-      return false;
-    } else {
-      phoneInput.classList.remove("is-invalid");
-      if (errorMessage) errorMessage.style.display = "none";
-      return true;
+    // Выводим сообщения в feedbackList
+    function renderFeedback(data) {
+        if (!data.length) {
+            $('#feedbackList').html('<div>Нет сообщений</div>');
+            return;
+        }
+        let html = '';
+        data.forEach(function(item) {
+            html += `<div class="border rounded p-2 mb-2">
+                <b>${escapeHtml(item.name)}</b>
+                <span style="font-size:13px;padding-left:8px;">${escapeHtml(item.email)} | ${escapeHtml(item.phone)} | <time>${item.created_at ? item.created_at.substr(0,16).replace("T", " ") : ""}</time></span>
+                <div>${escapeHtml(item.message)}</div>
+            </div>`;
+        });
+        $('#feedbackList').html(html);
     }
-  }
 
-  function showModal(message) {
-    document.getElementById('modal-text').textContent = message;
-    formModal.show();
-  }
+    // Защита от XSS на выводе
+    function escapeHtml(txt) {
+        return $('<div/>').text(txt).html();
+    }
+
+    // Кнопка "Обновить"
+    $('#refreshFeedback').on('click', updateFeedbackList);
+
+    // Обновление каждые 60 секунд
+    setInterval(updateFeedbackList, 60000);
+
+    // Первый показ по загрузке
+    updateFeedbackList();
 });

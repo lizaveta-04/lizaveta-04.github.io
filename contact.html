@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -15,14 +15,12 @@
       <img src="logo.png" alt="Логотип" class="logo">
       <h1>Обратная связь</h1>
     </div>
-
     <input type="checkbox" id="menu-toggle">
     <label for="menu-toggle" class="menu-icon">
       <span></span>
       <span></span>
       <span></span>
     </label>
-
     <nav class="menu">
       <a href="index.html">Главная</a>
       <a href="receipes2.php">Рецепты</a>
@@ -32,55 +30,58 @@
 
 <main>
   <div class="container contact-container">
-    <form id="contactForm" class="contact-form" method="POST" action="script.php">
+
+    <!-- ФОРМА обратной связи -->
+    <form id="contactForm" class="contact-form mb-5">
       <input type="hidden" name="form_type" value="feedback" />
       <h2>Свяжитесь с нами</h2>
-
       <input type="text" id="name" name="name" placeholder="Ваше имя" required>
       <div class="error-message">Пожалуйста, введите ваше имя</div>
-
       <input type="email" id="email" name="email" placeholder="Электронная почта" required>
       <div class="error-message">Пожалуйста, введите корректный email</div>
-
       <input type="tel" id="phone" name="phone" placeholder="Мобильный телефон" required>
       <div class="error-message">Пожалуйста, введите корректный номер телефона</div>
-
       <textarea id="message" name="message" placeholder="Ваш комментарий" rows="5" required></textarea>
       <div class="error-message">Пожалуйста, введите ваше сообщение</div>
-
       <button type="submit">Отправить</button>
     </form>
+
+<div class="feedback-list-window">
+  <div class="feedback-list-header">
+    <h3>Последние сообщения</h3>
+    <button id="refreshFeedback" class="btn btn-secondary btn-sm">Обновить</button>
   </div>
+  <div id="feedbackList" class="feedback-list"></div>
+</div>
 </main>
 
   <footer class="footer">
-    <!-- Левая часть подвала с контактами -->
     <div class="left">
       <p>Контакты<br>
       тел.: 89539870092<br>
       email: lizashe2005@mail.ru</p>
     </div>
-    <!-- Правая часть подвала с копирайтом -->
     <div class="right">
       <p>© 2025 Кулинарная книга.<br>Все права защищены.</p>
     </div>
   </footer>
 
-  <div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body text-center">
-          <p id="modal-text" class="my-4"></p>
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-        </div>
+<!-- Модальное окно Bootstrap -->
+<div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <p id="modal-text" class="my-4"></p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Подключение Bootstrap JS + Popper -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
-  </body>
+</body>
 </html>
