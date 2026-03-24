@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: cookbook_db
+    environment:
+      POSTGRES_DB: dbrecipes
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - cookbook_network
+    restart: unless-stopped
+
+  php:
+    build: .
+    container_name: cookbook_php
+    volumes:
+      - .:/var/www/html
+    networks:
+      - cookbook_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: cookbook_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - cookbook_network
+    depends_on:
+      - php
+    restart: unless-stopped
+
+networks:
+  cookbook_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
